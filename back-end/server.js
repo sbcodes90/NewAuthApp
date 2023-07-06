@@ -3,9 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes');
+const mongoInfo = process.env.DB_KEY;
 
 
-mongoose.connect("mongodb+srv://sydneycburrell29:s3794870@cluster0.3px00fx.mongodb.net/?retryWrites=true&w=majority");
+mongoose.connect(mongoInfo);
 const database = mongoose.connection;
 
 database.on('error', (error) => {

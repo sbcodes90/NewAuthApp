@@ -1,11 +1,16 @@
 const express = require('express');
 const Model = require('../model/model');
 const bcrypt = require('bcrypt');//encrpyts user passwords
+const { userValidation } = require('../validation');
 const router = express.Router()
 
-//Post Method
+//POST Method
 router.post('/post', async (req, res) => {
+   
     //validate data before you add a user
+   const { error } = userValidation(req.body)
+    //if we have a error from our validation dont create new user
+    if(error) return res.status(400).send(error.details[0].message)
     //encrypt the password 
 
     const encryptPassword = await bcrypt.genSalt(10);

@@ -1,14 +1,21 @@
 const express = require('express');
 const Model = require('../model/model');
-
+const bcrypt = require('bcrypt');//encrpyts user passwords
 const router = express.Router()
 
 //Post Method
 router.post('/post', async (req, res) => {
+    //validate data before you add a user
+    //encrypt the password 
+
+    const encryptPassword = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, encryptPassword);
+
+    //create a new user
     const data = new Model({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: hashedPassword
     })
 
     try {

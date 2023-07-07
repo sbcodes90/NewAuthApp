@@ -1,12 +1,18 @@
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
-import Home from './Home';
+import { UserInfoPage } from './UserInfoPage';
+import { LoginPage } from "./LoginPage";
 
 function App() {
   return (
-    <div className="page-container">
-      <Home />
-    </div>
+    <Router>
+  <Routes>
+      <Route path="/" element={<UserInfoPage />}/>
+      <Route path="/login" element={<LoginPage />}/>
+
+      
+    </Routes>
+    </Router>
   );
 }
 

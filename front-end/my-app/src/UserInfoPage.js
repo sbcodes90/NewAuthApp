@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 
-function Home() {
+export const UserInfoPage = () => {
 const [data, setData] = useState([])
 
-    const url = `http://localhost:8080/api/getAll`;
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
     const getData = async () => {
         const result = await axios.get(
             'http://localhost:8080/api/getAll',
@@ -34,16 +28,18 @@ const [data, setData] = useState([])
     }, [])
     
     return (
+        <div className="page-container">
         <div className="content-container">
-            <h1>Home</h1>
+            <h1>User Info</h1>
+            {!data && <h2>No Data</h2>}
             {data.map((item)=> {
                return <div key={item.id}>
-                <div>UserName:{item.name}</div>
+                <div>UserName:{item.userName}</div>
                 <div>Email:{item.email}</div>
                 </div>
             })}
         </div>
+        </div>
     )
 }
 
-export default Home

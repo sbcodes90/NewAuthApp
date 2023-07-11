@@ -2,6 +2,8 @@ const express = require('express');
 const User = require('../model/User');
 const bcrypt = require('bcrypt');//encrpyts user passwords
 const { userValidation } = require('../validation');
+const jwt = require('jsonwebtoken');
+
 const router = express.Router()
 
 //POST Method
@@ -17,7 +19,7 @@ router.post('/post', async (req, res) => {
     const emailExist = await User.findOne({email: req.body.email})
 
     if(emailExist) return res.status(400).send('Email already exists');
-    
+
     //encrypt the password 
     const encryptPassword = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, encryptPassword);
@@ -64,6 +66,15 @@ router.patch('/update/:id', (req, res) => {
 router.delete('/delete/:id', (req, res) => {
     res.send('Delete by ID API')
 })
+
+
+//LOG IN
+router.post('/login', async (req, res) => {
+//jwt a token that remembers that your logged in
+const token = jwt.sign({_id: User._id}, process.env.TOKEN_SECRET);
+res.header('auth-token', token).send(token);
+})
+
 
 
 module.exports = router;

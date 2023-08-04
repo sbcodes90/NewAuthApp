@@ -75,6 +75,28 @@ const token = jwt.sign({_id: User._id}, process.env.TOKEN_SECRET);
 res.header('auth-token', token).send(token);
 })
 
+router.post('/login', async (req, res) => {
 
+    //validate data before you add a user
+    const { error } = userValidation(req.body)
+   
+    //if we have a error from our validation dont create new user
+    if (error) return res.status(400).send(error.details[0].message)
+    
+    //check if user exists
+    const user = await User.findOne({email: req.body.email})
+
+    if(!user) return res.status(400).send('Email does not exist');
+
+    //check is password is correct
+    const validPass = await bcrypt.compare(req.body.password, user.password)
+
+    if(!validPass) return res.status(400).send('Invalid password')
+
+    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
+    
+    //  
+    res.header('auth-token', token).send(token)
+})
 
 module.exports = router;
